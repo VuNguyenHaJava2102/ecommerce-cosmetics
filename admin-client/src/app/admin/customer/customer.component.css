@@ -1,0 +1,7 @@
+table {
+  width: 100%;
+}
+.profile-img-thumbnail {
+  height: 150px;
+  border-radius: 5%;
+}

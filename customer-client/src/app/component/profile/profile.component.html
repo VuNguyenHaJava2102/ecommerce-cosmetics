@@ -1,0 +1,271 @@
+<main class="ps-page--my-account">
+  <div class="ps-breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a [routerLink]="['/home']">Trang chủ</a></li>
+        <li><a [routerLink]="['/profile']">Tài khoản</a></li>
+        <li>Tài khoản cá nhân</li>
+      </ul>
+    </div>
+  </div>
+
+  <section class="ps-section--account">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="ps-section__left">
+            <aside class="ps-widget--account-dashboard">
+              <div class="ps-widget__header">
+                <img [src]="loggedUser.imageUrl" />
+                <figure>
+                  <p>
+                    Tên: <span style="color: #09c">{{ loggedUser.name }}</span>
+                  </p>
+                  <p>
+                    Tham gia:
+                    <span>{{
+                      loggedUser.registerDate | date : "dd-MM-yyyy"
+                    }}</span>
+                  </p>
+                </figure>
+              </div>
+              <div class="ps-widget__content">
+                <ul>
+                  <li>
+                    <a href="javascript:void(0);"
+                      ><i class="icon-user"></i> {{ loggedUser.email }}</a
+                    >
+                    <a href="javascript:void(0);"
+                      ><i class="icon-papers"></i> {{ loggedUser.phone }}</a
+                    >
+                    <a href="javascript:void(0);"
+                      ><i class="icon-user"></i>
+                      {{ loggedUser.gender ? "Nam" : "Nữ" }}</a
+                    >
+                    <a href="javascript:void(0);"
+                      ><i class="icon-map-marker"></i>
+                      {{ loggedUser.address }}</a
+                    >
+                    <a href="javascript:void(0);"
+                      ><i class="icon-store"></i>Đơn hoàn thành:
+                      {{ totalCompletedOrders }} đơn</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </aside>
+          </div>
+        </div>
+
+        <div class="col-lg-9">
+          <div class="ps-section__right">
+            <div class="ps-section--account-setting">
+              <div class="ps-section__header">
+                <h3>Lịch sử đặt hàng</h3>
+              </div>
+              <div class="ps-section__content">
+                <div class="table-responsive">
+                  <table class="table ps-table ps-table--invoices">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Ngày đặt</th>
+                        <th>Tổng tiền</th>
+                        <th>Địa chỉ</th>
+                        <th>Số điện thoại</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="
+                          let item of orders
+                            | paginate : { itemsPerPage: 5, currentPage: page };
+                          let i = index
+                        "
+                      >
+                        <td>{{ i + 1 }}</td>
+                        <td style="width: 15%">
+                          {{ item.orderTime | date : "dd-MM-yyyy HH:mm" }}
+                        </td>
+                        <td>{{ item.checkoutAmount | currency : "VND" }}</td>
+                        <td>{{ item.address }}</td>
+                        <td>{{ item.phone }}</td>
+                        <td style="width: 17%">
+                          {{ item.orderStatus }}
+                        </td>
+                        <td style="width: 5%">
+                          <a
+                            (click)="openModal(item.id)"
+                            title="Chi tiết đơn hàng"
+                            style="
+                              cursor: pointer;
+                              width: 35px;
+                              height: 35px;
+                              font-size: 14px;
+                              line-height: 35px;
+                              text-align: center;
+                              border-radius: 5px;
+                              margin: 3px;
+                              color: var(--brandcolor);
+                              background: var(--whitecolor);
+                              text-shadow: var(--tshadow);
+                            "
+                            onMouseOver="this.style.color='white', this.style.backgroundColor='#326e51'"
+                            onMouseOut="this.style.color='#326e51', this.style.backgroundColor='white'"
+                            ><i class="icon-eye"></i
+                          ></a>
+                          <a
+                            (click)="
+                              cancelOrder(
+                                item.orderStatus === 'ORDERED' ? item.id : -1
+                              )
+                            "
+                            [style]="
+                              item.orderStatus === 'ORDERED'
+                                ? 'cursor: pointer'
+                                : 'cursor: not-allowed'
+                            "
+                            [title]="
+                              item.orderStatus === 'ORDERED'
+                                ? 'Hủy đơn hàng này'
+                                : 'Đơn hàng đã được xác nhận, bạn không thể hủy'
+                            "
+                            onMouseOver="this.style.color='white', this.style.backgroundColor='red'"
+                            onMouseOut="this.style.color='red', this.style.backgroundColor='white'"
+                          >
+                            <i class="icon-cross"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <ul>
+                        <pagination-controls
+                          (pageChange)="page = $event"
+                          previousLabel=""
+                          nextLabel=""
+                          class="text-center my-page"
+                        >
+                        </pagination-controls>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ps-newsletter">
+    <div class="container">
+      <form class="ps-form--newsletter">
+        <div class="row">
+          <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="ps-form__left">
+              <h3>Bản tin</h3>
+              <p>Đăng ký để nhận thông tin về sản phẩm và phiếu giảm giá</p>
+            </div>
+          </div>
+          <div class="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="ps-form__right">
+              <div class="form-group--nest">
+                <input
+                  class="form-control"
+                  type="email"
+                  placeholder="Địa chỉ Email"
+                />
+                <button class="ps-btn">Gửi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<!-- Button trigger order detail modal -->
+<button
+  id="openOrderDetailsBtn"
+  class="btn btn-primary"
+  type="button"
+  style="display: none"
+  data-bs-toggle="modal"
+  data-bs-target="#exampleModal"
+>
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div
+  id="exampleModal"
+  class="modal fade"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Chi tiết đơn hàng</h4>
+        <h4 class="float-right">
+          Tổng tiền: {{ selectedOrder?.checkoutAmount | currency : "VND" }}
+        </h4>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+          <thead>
+            <tr style="background-color: #326e51; color: white">
+              <th class="text-center">STT</th>
+              <th>Sản phẩm</th>
+              <th>Giá</th>
+              <th class="text-center">Số lượng</th>
+              <th
+                class="text-center"
+                *ngIf="selectedOrder?.orderStatus === 'DELIVERED'"
+              >
+                Đánh giá
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of orderItems; let i = index">
+              <td class="text-center">{{ i + 1 }}</td>
+              <td>
+                <img
+                  [src]="item.product.imageUrl"
+                  alt="Hình ảnh sản phẩm"
+                  width="60px"
+                  style="cursor: pointer"
+                  [routerLink]="['/product-detail/' + item.product.id]"
+                />
+                {{ item.product.name }}
+              </td>
+              <td>{{ item.price | currency : "VND" }}</td>
+              <td class="text-center">{{ item.quantity }}</td>
+              <td
+                class="text-center"
+                *ngIf="selectedOrder?.orderStatus === 'DELIVERED'"
+              >
+                <!-- <app-rating
+                  style="cursor: pointer; color: #ffcc23"
+                  title="Đánh giá"
+                  [orderDetail]="item"
+                  (editFinish)="finish()"
+                >
+                </app-rating> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

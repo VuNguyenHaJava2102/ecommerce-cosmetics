@@ -1,0 +1,70 @@
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#addFormModal"
+  mat-raised-button
+  color="primary"
+>
+  Thêm
+</button>
+
+<!-- Modal -->
+<div id="addFormModal" class="modal fade">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">
+          Thêm loại sản phẩm
+        </h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="addForm">
+          <input type="hidden" formControlName="id" />
+          <input type="hidden" formControlName="status" />
+          <div class="form-group mb-3">
+            <label for="name" class="form-label">Tên loại sản phẩm:</label>
+            <input
+              id="name"
+              class="form-control"
+              type="text"
+              placeholder="Tên loại sản phẩm"
+              [ngClass]="{
+                'is-invalid':
+                  addForm.get('name')?.touched && addForm.get('name')?.invalid
+              }"
+              formControlName="name"
+            />
+            <small class="invalid-feedback"
+              >Hãy nhập đúng tên loại sản phẩm</small
+            >
+          </div>
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="addForm?.invalid"
+            (click)="add()"
+          >
+            Thêm
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="closeBtnAdd"
+          class="btn btn-secondary"
+          type="button"
+          data-bs-dismiss="modal"
+        >
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

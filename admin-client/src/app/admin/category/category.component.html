@@ -1,0 +1,175 @@
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Danh sách loại hàng</h1>
+  </div>
+
+  <!-- Content Row -->
+  <div class="row">
+    <div class="col-12">
+      <mat-form-field>
+        <mat-label>Tìm kiếm</mat-label>
+        <input matInput type="text" (keyup)="search($event)" />
+      </mat-form-field>
+      <button
+        mat-raised-button
+        color="primary"
+        class="ml-3"
+        style="float: right"
+      >
+        Xuất Excel
+      </button>
+      <app-add-category
+        style="float: right"
+        (reloadList)="reloadList()"
+      ></app-add-category>
+    </div>
+    <div class="col-12">
+      <table
+        mat-table
+        matTableExporter
+        [dataSource]="categoryMatTable"
+        matSort
+        class="mat-elevation-z8"
+      >
+        <ng-container matColumnDef="id">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="width: 15%"
+          >
+            Mã loại hàng
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="width: 60%"
+          >
+            Tên loại hàng
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="update">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="width: 10%; text-align: center"
+          >
+            Sửa
+          </th>
+          <td mat-cell *matCellDef="let row" style="text-align: center">
+            <a
+              style="color: steelblue; cursor: pointer"
+              (click)="openUpdateModal(row.id)"
+              data-bs-toggle="modal"
+              data-bs-target="#updateModal"
+            >
+              <i class="fas fa-edit"></i>
+            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="delete">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="width: 10%; text-align: center"
+          >
+            Xoá
+          </th>
+          <td mat-cell *matCellDef="let row" style="text-align: center">
+            <a
+              (click)="delete(row.id, row.name)"
+              style="color: steelblue; cursor: pointer"
+              ><i class="fas fa-trash"></i
+            ></a>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+      <mat-paginator
+        [length]="totalCategories"
+        [pageSize]="10"
+        showFirstLastButtons
+        [pageSizeOptions]="[10, 25, 50, 100]"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+<!-- update modal(fade) -->
+<div id="updateModal" class="modal fade">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm khách hàng</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="editForm">
+          <input type="hidden" formControlName="id" />
+          <input type="hidden" formControlName="status" />
+          <div class="form-group mb-3">
+            <label for="name" class="form-label">Tên loại sản phẩm:</label>
+            <input
+              id="name"
+              class="form-control"
+              type="text"
+              placeholder="Tên loại sản phẩm"
+              [ngClass]="{
+                'is-invalid':
+                  editForm.get('name')?.touched && editForm.get('name')?.invalid
+              }"
+              formControlName="name"
+            />
+            <small class="invalid-feedback"
+              >Hãy nhập đúng tên loại sản phẩm</small
+            >
+          </div>
+
+          <div class="form-group col-12">
+            <label for="exampleFormControlSelect1">Status</label>
+            <select
+              class="form-control"
+              id="status"
+              name="status"
+              formControlName="status"
+            >
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+          <button
+            mat-raised-button
+            color="primary"
+            [disabled]="editForm?.invalid"
+            (click)="update()"
+          >
+            Sửa
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="closeBtnEdit"
+          class="btn btn-secondary"
+          type="button"
+          data-bs-dismiss="modal"
+        >
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

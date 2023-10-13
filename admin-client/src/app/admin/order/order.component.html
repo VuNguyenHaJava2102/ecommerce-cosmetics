@@ -1,0 +1,229 @@
+<div class="container-fluid">
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Danh sách đơn hàng</h1>
+  </div>
+
+  <!-- Content Row -->
+  <div class="row">
+    <div class="col-12">
+      <mat-form-field>
+        <mat-label>Tìm kiếm</mat-label>
+        <input matInput type="text" (keyup)="search($event)" />
+      </mat-form-field>
+      <button mat-raised-button color="primary" style="float: right">
+        Xuất Excel
+      </button>
+
+      <table
+        mat-table
+        matTableExporter
+        [dataSource]="orderMatTable"
+        matSort
+        class="mat-elevation-z8"
+      >
+        <!-- order code -->
+        <ng-container matColumnDef="id">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="width: 9%"
+          >
+            Mã HĐ
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.orderCode }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Khách hàng</th>
+          <td mat-cell *matCellDef="let row">{{ row.user.name }}</td>
+        </ng-container>
+
+        <!-- address -->
+        <ng-container matColumnDef="address">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="width: 30%"
+          >
+            Địa chỉ
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.address }}</td>
+        </ng-container>
+
+        <!-- phone -->
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>SĐT</th>
+          <td mat-cell *matCellDef="let row">{{ row.phone }}</td>
+        </ng-container>
+
+        <!-- checkout amount -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tổng tiền</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.checkoutAmount | currency : "VND" }}
+          </td>
+        </ng-container>
+
+        <!-- order time -->
+        <ng-container matColumnDef="orderDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ngày đặt</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.orderTime | date : "dd-MM-yyyy" }}
+          </td>
+        </ng-container>
+
+        <!-- status -->
+        <ng-container matColumnDef="status">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="width: 12%"
+          >
+            Trạng thái
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.orderStatus }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="view">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="width: 7%; text-align: center"
+          >
+            Kiểm tra
+          </th>
+          <td mat-cell *matCellDef="let row" style="text-align: center">
+            <a
+              class="fas fa-clipboard-check"
+              style="cursor: pointer; color: teal; font-size: 19px"
+              data-bs-toggle="modal"
+              data-bs-target="#orderItemsModal"
+              (click)="openOrderItemsModal(row.id)"
+            >
+            </a>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns"></tr>
+      </table>
+      <mat-paginator
+        [length]="totalOrder"
+        showFirstLastButtons
+        [pageSize]="12"
+        [pageSizeOptions]="[10, 12, 25, 50, 100]"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+<!-- order status(fade modal) -->
+<div id="orderItemsModal" class="modal fade">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title p-0">Chi tiết đơn hàng</h2>
+        <h2>
+          Tổng tiền: {{ selectedOrder?.checkoutAmount | currency : "VND" }}
+        </h2>
+      </div>
+      <div class="modal-body">
+        <table
+          class="mat-elevation-z8"
+          mat-table
+          matSort
+          [dataSource]="orderItemMatTable"
+        >
+          <ng-container matColumnDef="index">
+            <th mat-header-cell *matHeaderCellDef style="width: 10%">STT</th>
+            <td mat-cell *matCellDef="let row; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="image">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let row">
+              <img
+                [src]="row.product.imageUrl"
+                class="img-fluid"
+                style="width: 40px"
+              />
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="product">
+            <th mat-header-cell *matHeaderCellDef>Sản phẩm</th>
+            <td mat-cell *matCellDef="let row">{{ row.product.name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Số lượng</th>
+            <td mat-cell *matCellDef="let row">{{ row.quantity }}</td>
+          </ng-container>
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Giá</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.price | currency : "VND" }}
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="orderItemColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: orderItemColumns"></tr>
+        </table>
+
+        <div class="d-flex mt-3 mb-4">
+          <select
+            id="statusSelector"
+            class="form-control"
+            (change)="updateOrderStatus($event)"
+          >
+            <option
+              value="ORDERED"
+              [selected]="selectedOrder?.orderStatus == 'ORDERED'"
+            >
+              ORDERED
+            </option>
+            <option
+              value="CONFIRMED"
+              [selected]="selectedOrder?.orderStatus == 'CONFIRMED'"
+            >
+              CONFIRMED
+            </option>
+            <option
+              value="READY_TO_DELIVERY"
+              [selected]="selectedOrder?.orderStatus == 'READY_TO_DELIVERY'"
+            >
+              READY TO DELIVERY
+            </option>
+            <option
+              value="TAKEN"
+              [selected]="selectedOrder?.orderStatus == 'TAKEN'"
+            >
+              TAKEN
+            </option>
+            <option
+              value="DELIVERING"
+              [selected]="selectedOrder?.orderStatus == 'DELIVERING'"
+            >
+              DELIVERING
+            </option>
+            <option
+              value="DELIVERED"
+              [selected]="selectedOrder?.orderStatus == 'DELIVERED'"
+            >
+              DELIVERED
+            </option>
+            <option
+              value="CANCEL"
+              [selected]="selectedOrder?.orderStatus == 'CANCEL'"
+            >
+              CANCEL
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

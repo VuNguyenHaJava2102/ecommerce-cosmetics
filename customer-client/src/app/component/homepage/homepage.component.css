@@ -1,0 +1,22 @@
+.star {
+  position: relative;
+  display: inline-block;
+  font-size: 5rem;
+  color: #d3d3d3;
+}
+.full {
+  color: #ffcc23;
+}
+.half {
+  position: absolute;
+  display: inline-block;
+  overflow: hidden;
+  color: #ffcc23;
+}
+.mt-130-px {
+  margin-top: 130px;
+}
+.product-img {
+  height: 120px;
+  object-fit: cover;
+}

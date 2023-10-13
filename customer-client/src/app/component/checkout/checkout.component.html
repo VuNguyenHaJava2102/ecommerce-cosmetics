@@ -1,0 +1,214 @@
+<div class="ps-page--simple">
+  <div class="ps-breadcrumb">
+    <div class="container">
+      <ul class="breadcrumb">
+        <li><a [routerLink]="['/home']">Trang chủ</a></li>
+        <li><a [routerLink]="['/all-product']">Cửa hàng</a></li>
+        <li>Thanh Toán</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="ps-checkout ps-section--shopping">
+    <div class="container">
+      <div class="ps-section__header">
+        <h1>Thanh Toán</h1>
+      </div>
+      <div class="ps-section__content">
+        <form class="ps-form--checkout" [formGroup]="checkoutForm">
+          <div class="row">
+            <div class="col-xl-7 col-lg-8 col-md-12 col-sm-12">
+              <div class="ps-form__billing-info">
+                <h3 class="ps-form__heading">Thông tin nhận hàng</h3>
+
+                <!-- Họ và tên -->
+                <div class="form-group">
+                  <label>Họ và tên<sup>*</sup> </label>
+                  <div class="form-group__content">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Họ và tên"
+                      readonly
+                      [value]="loggedUser.name"
+                    />
+                  </div>
+                </div>
+
+                <!-- Số điện thoại -->
+                <div class="form-group">
+                  <label>Số điện thoại<sup>*</sup> </label>
+                  <div class="form-group__content">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Số điện thoại"
+                      formControlName="phone"
+                      [ngClass]="{
+                        'is-invalid':
+                          checkoutForm.get('phone')?.touched &&
+                          checkoutForm.get('phone')?.invalid
+                      }"
+                    />
+                    <small class="invalid-feedback"
+                      >Số điện thoại không hợp lệ</small
+                    >
+                  </div>
+                </div>
+
+                <!-- tỉnh/thành -->
+                <div class="form-group">
+                  <label>Tỉnh/thành<sup>*</sup> </label>
+                  <div class="form-group__content">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Tỉnh/thành"
+                      formControlName="province"
+                      [ngClass]="{
+                        'is-invalid':
+                          checkoutForm.get('province')?.touched &&
+                          checkoutForm.get('province')?.invalid
+                      }"
+                    />
+                    <small class="invalid-feedback"
+                      >Hãy nhập tỉnh/thành của bạn</small
+                    >
+                  </div>
+                </div>
+
+                <!-- quận/huyện/thành phố trực thuộc -->
+                <div class="form-group">
+                  <label>Quận/huyện/thành phố trực thuộc<sup>*</sup> </label>
+                  <div class="form-group__content">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Quận/huyện/thành phố trực thuộc"
+                      formControlName="district"
+                      [ngClass]="{
+                        'is-invalid':
+                          checkoutForm.get('district')?.touched &&
+                          checkoutForm.get('district')?.invalid
+                      }"
+                    />
+                    <small class="invalid-feedback"
+                      >Hãy nhập quận/huyện/thành phố trực thuộc của bạn</small
+                    >
+                  </div>
+                </div>
+
+                <!-- phường/xã -->
+                <div class="form-group">
+                  <label>Phường/xã<sup>*</sup> </label>
+                  <div class="form-group__content">
+                    <input
+                      class="form-control"
+                      type="text"
+                      placeholder="Phường/xã"
+                      formControlName="ward"
+                      [ngClass]="{
+                        'is-invalid':
+                          checkoutForm.get('ward')?.touched &&
+                          checkoutForm.get('ward')?.invalid
+                      }"
+                    />
+                    <small class="invalid-feedback"
+                      >Hãy nhập phường/xã của bạn</small
+                    >
+                  </div>
+                </div>
+
+                <!-- số nhà -->
+                <div class="form-group">
+                  <label>Số nhà<sup>*</sup> </label>
+                  <div class="form-group__content">
+                    <input
+                      class="form-control"
+                      type="text"
+                      formControlName="houseNumber"
+                      [ngClass]="{
+                        'is-invalid':
+                          checkoutForm.get('houseNumber')?.touched &&
+                          checkoutForm.get('houseNumber')?.invalid
+                      }"
+                      placeholder="Số nhà"
+                    />
+                    <small class="invalid-feedback"
+                      >Hãy nhập số nhà của bạn</small
+                    >
+                  </div>
+                </div>
+
+                <h3 class="mt-40">Thông tin bổ sung</h3>
+                <div class="form-group">
+                  <label>Ghi chú đơn hàng</label>
+                  <div class="form-group__content">
+                    <textarea
+                      class="form-control"
+                      rows="7"
+                      placeholder="Ghi chú về đơn hàng của bạn"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-5 col-lg-4 col-md-12 col-sm-12">
+              <div class="ps-form__total">
+                <h3 class="ps-form__heading">Thông tin đơn hàng</h3>
+                <div class="content">
+                  <div class="ps-block--checkout-total">
+                    <div class="ps-block__header">
+                      <p>Sản phẩm</p>
+                    </div>
+                    <div class="ps-block__content">
+                      <table class="table ps-block__products">
+                        <tbody>
+                          <tr *ngFor="let item of cartItems; let i = index">
+                            <td>
+                              <a href="javascript:void(0);">
+                                {{ item.product.name }} × {{ item.quantity }}</a
+                              >
+                              <p>
+                                Thể loại:<strong>
+                                  {{ item.product.category.name }}</strong
+                                >
+                              </p>
+                            </td>
+                            <td>{{ item.price | currency : "VND" }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <h4 class="ps-block__title">
+                        Tổng tiền:
+                        <span> {{ realAmount | currency : "VND" }}</span>
+                      </h4>
+                      <h4 class="ps-block__title">
+                        Tiết kiệm:
+                        <span> {{ discount | currency : "VND" }}</span>
+                      </h4>
+                      <h3>
+                        Tổng tiền phải thanh toán:
+                        <span style="color: red; padding-left: 40px">
+                          {{ checkoutAmount | currency : "VND" }}</span
+                        >
+                      </h3>
+                    </div>
+                  </div>
+                  <p style="text-align: center">Thanh tóa khi nhận hàng</p>
+                  <a
+                    class="ps-btn ps-btn--fullwidth"
+                    href="javascript:void(0);"
+                    (click)="checkout()"
+                    >Xác nhận thanh toán</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

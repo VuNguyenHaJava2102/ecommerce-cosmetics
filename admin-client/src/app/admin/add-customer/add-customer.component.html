@@ -1,0 +1,174 @@
+<button
+  type="button"
+  class="btn btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#addFormModal"
+  mat-raised-button
+  color="primary"
+>
+  Thêm khách hàng
+</button>
+
+<!-- Modal -->
+<div id="addFormModal" class="modal fade">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Thêm khách hàng</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="addForm" class="row">
+          <div class="col-6">
+            <div class="form-group col-12">
+              <label for="name">Tên khách hàng</label>
+              <input
+                type="text"
+                id="name"
+                [ngClass]="{
+                  'is-invalid':
+                    addForm.get('name')?.touched && addForm.get('name')?.invalid
+                }"
+                class="form-control"
+                formControlName="name"
+              />
+              <small class="invalid-feedback">Tên không hợp lệ</small>
+            </div>
+            <div class="form-group col-12">
+              <label for="email">Email</label>
+              <div class="input-group">
+                <input
+                  type="email"
+                  email
+                  id="price"
+                  [ngClass]="{
+                    'is-invalid':
+                      addForm.get('email')?.touched &&
+                      addForm.get('email')?.invalid
+                  }"
+                  class="form-control"
+                  formControlName="email"
+                />
+                <small class="invalid-feedback">Email không hợp lệ</small>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <label for="password">Mật khẩu</label>
+              <div class="input-group">
+                <input
+                  type="password"
+                  id="password"
+                  [ngClass]="{
+                    'is-invalid':
+                      addForm.get('password')?.touched &&
+                      addForm.get('password')?.invalid
+                  }"
+                  class="form-control"
+                  formControlName="password"
+                />
+                <small class="invalid-feedback">Mật khẩu không hợp lệ</small>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <label for="address">Địa chỉ</label>
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="address"
+                  [ngClass]="{
+                    'is-invalid':
+                      addForm.get('address')?.touched &&
+                      addForm.get('address')?.invalid
+                  }"
+                  class="form-control"
+                  formControlName="address"
+                />
+                <small class="invalid-feedback">Địa chỉ không hợp lệ</small>
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <label for="phone">Số điện thoại</label>
+              <div class="input-group">
+                <input
+                  type="text"
+                  id="phone"
+                  [ngClass]="{
+                    'is-invalid':
+                      addForm.get('phone')?.touched &&
+                      addForm.get('phone')?.invalid
+                  }"
+                  class="form-control"
+                  formControlName="phone"
+                />
+                <small class="invalid-feedback"
+                  >Số điện thoại không hợp lệ</small
+                >
+              </div>
+            </div>
+            <div class="form-group col-12">
+              <label for="exampleFormControlSelect1">Giới tính</label>
+              <select
+                class="form-control"
+                id="gender"
+                name="gender"
+                formControlName="gender"
+              >
+                <option value="true">Nam</option>
+                <option value="false">Nữ</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="col-12 text-center">
+              <h3>Ảnh đại diện</h3>
+              <div class="text-center">
+                <img
+                  id="addCustomerThumbnail"
+                  class="profile-img-thumbnail"
+                  src="/assets/image/default-image.jpg"
+                />
+              </div>
+              <div class="custom-file mt-3" style="width: 80%">
+                <input
+                  id="customFile"
+                  class="custom-file-input"
+                  type="file"
+                  accept="image/*"
+                  (change)="imageChange($event)"
+                />
+                <label class="custom-file-label" for="customFile"
+                  >Chọn ảnh</label
+                >
+              </div>
+            </div>
+          </div>
+
+          <button
+            mat-raised-button
+            color="primary"
+            class="col-2 m-3"
+            [disabled]="addForm?.invalid"
+            (click)="add()"
+          >
+            Thêm
+          </button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          id="closeBtn"
+          class="btn btn-secondary"
+          type="button"
+          data-bs-dismiss="modal"
+        >
+          Đóng
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
