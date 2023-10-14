@@ -87,7 +87,8 @@
                       >
                         <td>{{ i + 1 }}</td>
                         <td style="width: 15%">
-                          {{ item.orderTime | date : "dd-MM-yyyy HH:mm" }}
+                          <!-- {{ item.orderTime | date : "dd-MM-yyyy HH:mm:ss" }} -->
+                          {{ item.orderTime }}
                         </td>
                         <td>{{ item.checkoutAmount | currency : "VND" }}</td>
                         <td>{{ item.address }}</td>
@@ -254,13 +255,13 @@
                 class="text-center"
                 *ngIf="selectedOrder?.orderStatus === 'DELIVERED'"
               >
-                <!-- <app-rating
+                <app-rating
                   style="cursor: pointer; color: #ffcc23"
                   title="Đánh giá"
                   [orderDetail]="item"
                   (editFinish)="finish()"
                 >
-                </app-rating> -->
+                </app-rating>
               </td>
             </tr>
           </tbody>

@@ -14,8 +14,6 @@ export class OrderItemService {
 
   //
   public getAllByOrderId(orderId: number): Observable<OrderItem[]> {
-    return this.http.get<OrderItem[]>(
-      `${this.apiUrl}/get-by-order-id/${orderId}`
-    );
+    return this.http.get<OrderItem[]>(`${this.apiUrl}/get-by-order/${orderId}`);
   }
 }

@@ -2,7 +2,6 @@ package com.havu.bedeveloper;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.File;
 
@@ -10,7 +9,6 @@ import static com.havu.bedeveloper.constant.FileConstant.PRODUCT_FOLDER;
 import static com.havu.bedeveloper.constant.FileConstant.USER_FOLDER;
 
 @SpringBootApplication
-@EnableScheduling
 public class BeAppApplication {
 
     public static void main(String[] args) {
