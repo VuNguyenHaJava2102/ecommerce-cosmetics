@@ -18,7 +18,6 @@ import java.util.List;
 @Configuration
 public class ApplicationConfiguration {
 
-    // test
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

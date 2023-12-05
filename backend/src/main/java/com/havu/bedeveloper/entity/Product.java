@@ -1,5 +1,6 @@
 package com.havu.bedeveloper.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -33,6 +34,8 @@ public class Product implements Serializable {
     private double price;
     private int discount;
     private String imageUrl;
+
+    @Column(length = 2048)
     private String description;
     private LocalDate enteredDate;
     private boolean active;

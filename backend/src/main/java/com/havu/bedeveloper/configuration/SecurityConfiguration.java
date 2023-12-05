@@ -42,8 +42,8 @@ public class SecurityConfiguration {
                 )
                 .exceptionHandling(handling ->
                         handling
-                                .authenticationEntryPoint(this.jwtAuthenticationEntryPoint)
-                                .accessDeniedHandler(this.jwtAccessDeniedHandler)
+                                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                                .accessDeniedHandler(jwtAccessDeniedHandler)
                 )
                 .addFilterBefore(this.jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
